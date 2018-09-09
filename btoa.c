@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <string.h>
+
+void binary_to_ascii(unsigned int value)
+{
+    unsigned int quotient; //�?
+    quotient = value / 16;
+    if (quotient != 0)
+        binary_to_ascii(quotient);
+    //putchar(value % 10 + '0');
+    putchar("0123456789ABCDEF"[value % 16]);        //?????????????? ? ?? ???????????????
+}
+
+int main() 
+{
+    printf("%d  %d  %d  %d  %d  %d\n", sizeof(char), sizeof(unsigned char), sizeof(int), sizeof(unsigned long int), sizeof(long int), sizeof(long long int));
+
+    int v = 666666;
+    int *vp = &v;
+    int **vpp = &vp;
+    int ***vppp = &vpp;
+    printf("%d %d %d %d \n", v, *vp , **vpp, ***vppp);
+    printf("%d %d %d \n", vp, vpp, vppp);          //???????????8???????????????你的明天
+    printf("%X %X %X \n", vp, vpp, vppp);
+    printf("%d %d %d \n", sizeof(vp), sizeof(vpp), sizeof(vppp));
+
+    //???????? ????? ? ??? ?????????
+    char *str1 = "HelloWorld.";             //?????????????????? Segementation Fault
+    char str2[] = "HelloWorld.";            //???
+
+    *str1 = 'h';                            //?????? ??????????????????
+    printf("%X %X \n", str1, str1 + 5);
+    strcpy(str1 + 5, "666");
+    puts(str1);
+    strcpy(str2 + 5, "666");
+    puts(str2);
+
+    binary_to_ascii(4267);
+    getchar();
+    return 0;
+}
