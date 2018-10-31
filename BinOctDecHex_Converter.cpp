@@ -18,10 +18,10 @@ int main()
     int input, system;
     while (1)
     {
-        printf("请输入一个数字,以及想要转换的对应进制数：");
+        printf("input a number and its Binary Variables: ");
         scanf("%d%d", &input, &system);
         //std::cin>>input>>system;
-        printf("转化为二进制为：");
+        printf("Convert to corresponding base binary: ");
         if (system == 8)
             printf("0");
         else if (system == 16)

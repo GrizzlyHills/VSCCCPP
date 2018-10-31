@@ -6,6 +6,37 @@
 #include <locale.h>
 #include <wchar.h>
 
+
+typedef enum
+{ 
+  GPIO_Speed_10MHz = 1,
+  GPIO_Speed_2MHz, 
+  GPIO_Speed_50MHz
+}GPIOSpeed_TypeDef;
+
+typedef enum
+{ GPIO_Mode_AIN = 0x0,
+  GPIO_Mode_IN_FLOATING = 0x04,
+  GPIO_Mode_IPD = 0x28,
+  GPIO_Mode_IPU = 0x48,
+  GPIO_Mode_Out_OD = 0x14,
+  GPIO_Mode_Out_PP = 0x10,
+  GPIO_Mode_AF_OD = 0x1C,
+  GPIO_Mode_AF_PP = 0x18
+}GPIOMode_TypeDef;
+
+typedef struct
+{
+  uint16_t GPIO_Pin;             /*!< Specifies the GPIO pins to be configured.
+                                      This parameter can be any value of @ref GPIO_pins_define */
+
+  GPIOSpeed_TypeDef GPIO_Speed;  /*!< Specifies the speed for the selected pins.
+                                      This parameter can be a value of @ref GPIOSpeed_TypeDef */
+
+  GPIOMode_TypeDef GPIO_Mode;    /*!< Specifies the operating mode for the selected pins.
+                                      This parameter can be a value of @ref GPIOMode_TypeDef */
+}GPIO_InitTypeDef;
+
 // 计算将产生 6  作为骰子值的随机数生成函数所返回的最大数。
 #define MAX_OK_RAND (int)((((long)RAND_MAX + 1) / 6) * 6 - 1)
 
@@ -13,6 +44,9 @@
 // 宏的用法
 #define DEBUG_PRINT(fmt, expr) \
         printf("File %s, line %d: %s = " fmt "\n", __FILE__, __LINE__, #expr, expr)
+
+
+typedef enum {RESET = 0X11, SET = !RESET} FlagStatus, ITStatus;        
 
 
 #define SUM(value) ((value) + (value))
@@ -30,8 +64,43 @@ void PrintStr(char const *s)
 {
     printf("%s", s);
 }
+
+void CheckBit()
+{
+    int16_t flags = 0xffff;
+    int16_t flags1 = 0xffff;
+    uint16_t MASK = 0xffff;
+    printf("flags = %d      MASK = %d\n", flags, MASK);
+    if(flags == MASK)
+        puts("WOW~ It's not a correct CheckBit skill.");   // 不能正常工作，其他位的值会导致毕竟站效果为假
+    if((flags & MASK) == MASK)
+        printf("(flags & MASK) = %d     (flags & flags1) = %d     WOW~ It's  a correct CheckBit skill.\n",
+                 flags&MASK, flags&flags1);   // 消除了符号位的影响，因为 flags&MASK 的值按照 uint16 解析。同理可见int16与int16的与运算结果按照有符号位解析。
+}
+
 int main()
 {
+    struct tmmp {
+        char a;
+        int b;
+        short c;
+    } wmmp;
+    printf("%d \n", sizeof(wmmp));
+
+    char buf[33] = {0};
+    int kind = 16;
+    sprintf(buf, "%dK", kind);
+    printf("%s\n", buf);
+
+    CheckBit();     // 位运算中检查位的值的方法验证
+
+    printf("RESET = %X      SET = %X\n\n", RESET, SET);
+
+    GPIOSpeed_TypeDef s;
+    GPIOMode_TypeDef m;
+    GPIO_InitTypeDef io;
+    printf("enum_GPIOSpeed 的长度：%d   enum_GPIOMode 的长度：%d   InitType 的长度：%d\n\n", sizeof(s), sizeof(m), sizeof(io));
+
 
     printf("long long 的长度：%d\n\n", sizeof(long long));
     int *ip;
